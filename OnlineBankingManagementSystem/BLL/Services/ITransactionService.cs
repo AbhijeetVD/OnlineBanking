@@ -6,6 +6,6 @@ namespace OnlineBankingManagementSystem.BLL.Services
     {
         public IEnumerable<TransactionDTO> GetAllTransactions();
         public TransactionDTO GetTransactionByAccountNumber(string accountNumber);
-        public void AddTransaction(TransactionDTO transaction);
+        public void AddTransaction(TransactionDTO transactionDTO);
     }
 }

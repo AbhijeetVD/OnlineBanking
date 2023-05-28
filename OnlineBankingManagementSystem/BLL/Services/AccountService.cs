@@ -1,6 +1,5 @@
 ﻿using OnlineBankingManagementSystem.BLL.DTOs;
 using OnlineBankingManagementSystem.DAL.Repositories;
-using OnlineBankingManagementSystem.DAL.Models;
 
 namespace OnlineBankingManagementSystem.BLL.Services
 {
