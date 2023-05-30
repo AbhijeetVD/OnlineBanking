@@ -7,6 +7,7 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
         public string AccountNumber { get; set; }
         public string FullName { get; set; }
         public decimal Balance { get; set; }
+        public int UserId { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
         public User User { get; set; }
         public static explicit operator Account(AccountDTO accountDTO)
@@ -16,7 +17,8 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
             {
                 AccountNumber = accountDTO.AccountNumber,
                 Balance = accountDTO.Balance,
-                User = accountDTO.User
+                User = accountDTO.User,
+                UserId = accountDTO.UserId
             };
         }
         public static implicit operator AccountDTO(Account account)
@@ -26,7 +28,8 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
             {
                 AccountNumber = account.AccountNumber,
                 Balance = account.Balance,
-                User = account.User
+                User = account.User,
+                UserId = account.UserId
             };
         }
     }

@@ -22,6 +22,10 @@ namespace OnlineBankingManagementSystem.DAL
                 .HasMany(a => a.Transactions)
                 .WithOne(t => t.Account)
                 .HasForeignKey(t => t.AccountNumber);
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Account)
+                .WithOne(a => a.User)
+                .HasForeignKey<User>(a => a.UserId);
             modelBuilder.Entity<Account>()
                 .HasOne(a => a.User)
                 .WithOne(u => u.Account)

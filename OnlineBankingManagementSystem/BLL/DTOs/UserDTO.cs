@@ -8,6 +8,7 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
         public string Username { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
+        public string Email { get; set; }
         public Account Account { get; set; }
 
         public string AccountNumber { get; set; }
@@ -21,7 +22,9 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
                 Password = userDTO.Password,
                 FullName = userDTO.FullName,
                 Account = userDTO.Account,
-                AccountNumber = userDTO.AccountNumber
+                AccountNumber = userDTO.AccountNumber,
+                Email = userDTO.Email
+                
             };
         }
         public static implicit operator UserDTO(User user)
@@ -34,7 +37,8 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
                 Password = user.Password,
                 FullName = user.FullName,
                 Account = user.Account,
-                AccountNumber = user.AccountNumber
+                AccountNumber = user.AccountNumber,
+                Email = user.Email
             };
         }
     }

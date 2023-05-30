@@ -4,6 +4,7 @@
     {
         public string AccountNumber { get; set; }
         public string FullName { get; set; }
+        public int UserId { get; set; }
         public string AccountType { get; set; }
         public decimal Balance { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }

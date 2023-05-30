@@ -7,5 +7,6 @@ namespace OnlineBankingManagementSystem.BLL.Services
         public IEnumerable<UserDTO> GetAllUsers();
         public UserDTO GetUserByAccountNumber(string accountNumber);
         public void AddUser(UserDTO userDTO);
+        public UserDTO GetUserByUserId(int userId);
     }
 }

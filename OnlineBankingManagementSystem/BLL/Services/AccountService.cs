@@ -1,5 +1,6 @@
 ﻿using OnlineBankingManagementSystem.BLL.DTOs;
 using OnlineBankingManagementSystem.DAL.Repositories;
+using OnlineBankingManagementSystem.DAL.Models;
 
 namespace OnlineBankingManagementSystem.BLL.Services
 {
@@ -12,7 +13,7 @@ namespace OnlineBankingManagementSystem.BLL.Services
         }
         public void AddAccount(AccountDTO account)
         {
-            accountrepo.Add(account);
+            accountrepo.Add((Account)account);
         }
         public void DeleteAccount(string accountNumber)
         {
@@ -31,7 +32,7 @@ namespace OnlineBankingManagementSystem.BLL.Services
 
         public void UpdateAccount(AccountDTO account)
         {
-            accountrepo.Update(account);
+            accountrepo.Update((Account)account);
         }
     }
 }

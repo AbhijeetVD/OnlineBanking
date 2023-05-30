@@ -20,10 +20,14 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
         {
             return context.Transactions.ToList();
         }
-
-        public Transaction GetByAccountNumber(string accountNumber)
+        public IEnumerable<Transaction> GetByAccountNumber(string accountNumber)
         {
-            return context.Transactions.Find(accountNumber);
+            return (IEnumerable<Transaction>)context.Transactions.Select(a => a.AccountNumber == accountNumber).ToList();
+
+        }
+        public Transaction GetById(int transactionId)
+        {
+            return context.Transactions.Find(transactionId);
         }
     }
 }

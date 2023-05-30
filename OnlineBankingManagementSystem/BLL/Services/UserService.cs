@@ -1,5 +1,6 @@
 ﻿using OnlineBankingManagementSystem.BLL.DTOs;
 using OnlineBankingManagementSystem.DAL.Repositories;
+using OnlineBankingManagementSystem.DAL.Models;
 
 namespace OnlineBankingManagementSystem.BLL.Services
 {
@@ -13,17 +14,21 @@ namespace OnlineBankingManagementSystem.BLL.Services
 
         public void AddUser(UserDTO user)
         {
-            userrepo.Add(user);
+            userrepo.Add((User)user);
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
         {
-            return userrepo.GetAll();
+            return (IEnumerable<UserDTO>)userrepo.GetAll();
         }
 
         public UserDTO GetUserByAccountNumber(string accountNumber)
         {
             return userrepo.GetByAccountNumber(accountNumber);
+        }
+        public UserDTO GetUserByUserId(int userId)
+        {
+            return userrepo.GetByUserId(userId);    
         }
     }
 }

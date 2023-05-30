@@ -1,4 +1,5 @@
-﻿using OnlineBankingManagementSystem.DAL.Models;
+﻿using OnlineBankingManagementSystem.BLL.DTOs;
+using OnlineBankingManagementSystem.DAL.Models;
 
 namespace OnlineBankingManagementSystem.DAL.Repositories
 {
