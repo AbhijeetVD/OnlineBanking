@@ -12,9 +12,9 @@ namespace OnlineBankingManagementSystem.BLL.Services
             this.userrepo = _userrepo;
         }
 
-        public void AddUser(UserDTO user)
+        public void AddUser(UserDTO userDTO)
         {
-            userrepo.Add((User)user);
+            userrepo.Add((User)userDTO);
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
@@ -26,9 +26,19 @@ namespace OnlineBankingManagementSystem.BLL.Services
         {
             return userrepo.GetByAccountNumber(accountNumber);
         }
+
+        public UserDTO GetUserByEmail(string email)
+        {
+            return userrepo.GetByEmail(email);
+        }
+
         public UserDTO GetUserByUserId(int userId)
         {
             return userrepo.GetByUserId(userId);    
+        }
+        public UserDTO GetUserByUsername(string username)
+        {
+            return userrepo.GetByUsername(username);
         }
     }
 }

@@ -6,7 +6,9 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
     {
         public IEnumerable<User> GetAll();
         public User GetByAccountNumber(string accountNumber);
-        public void Add(User user);
         public User GetByUserId(int userId);
+        public User GetByUsername(string username);
+        public User GetByEmail(string email);
+        public void Add(User user);
     }
 }
