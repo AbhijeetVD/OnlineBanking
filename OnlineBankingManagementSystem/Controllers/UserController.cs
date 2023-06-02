@@ -15,34 +15,60 @@ namespace OnlineBankingManagementSystem.Controllers
         [HttpPost]
         public IActionResult AddUser(UserDTO user)
         {
-            userservice.AddUser(user);
-            return CreatedAtAction(nameof(GetUserByUserId), new { id = user.UserId }, user);
+            try
+            {
+                userservice.AddUser(user);
+                return CreatedAtAction(nameof(GetUserByUserId), new { id = user.UserId }, user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            var users = userservice.GetAllUsers();
-            return Ok(users);
+            try
+            {
+                var users = userservice.GetAllUsers();
+                return Ok(users);
+            }
+            catch (Exception e) { 
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet("{accountNumber}")]
         public IActionResult GetUserByAccountNumber(string accountNumber)
         {
-            var user = userservice.GetUserByAccountNumber(accountNumber);
-            if(user == null)
+            try
             {
-                return NotFound();
+                var user = userservice.GetUserByAccountNumber(accountNumber);
+                if(user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet("{userId}")]
         public IActionResult GetUserByUserId(int userId)
         {
-            var user = userservice.GetUserByUserId(userId);
-            if( user == null)
+            try
             {
-                return NotFound();
+                var user = userservice.GetUserByUserId(userId);
+                if( user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception e) { 
+                return BadRequest(e.Message) ;
+            }
         }
     }
 }

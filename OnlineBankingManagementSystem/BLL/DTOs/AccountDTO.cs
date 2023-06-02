@@ -18,7 +18,6 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
                 AccountNumber = accountDTO.AccountNumber,
                 Balance = accountDTO.Balance,
                 User = accountDTO.User,
-                UserId = accountDTO.UserId
             };
         }
         public static implicit operator AccountDTO(Account account)
@@ -29,7 +28,6 @@ namespace OnlineBankingManagementSystem.BLL.DTOs
                 AccountNumber = account.AccountNumber,
                 Balance = account.Balance,
                 User = account.User,
-                UserId = account.UserId
             };
         }
     }

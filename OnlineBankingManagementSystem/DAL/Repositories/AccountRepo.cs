@@ -12,15 +12,15 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
         }
         public void Add(Account account)
         {
-            context.Accounts.Add(account);
-            context.SaveChanges();
+                context.Accounts.Add(account);
+                context.SaveChanges();
         }
 
         public void Delete(string accountNumber)
         {
-            var account = GetByAccountNumber(accountNumber);
-            context.Accounts.Remove(account);
-            context.SaveChanges();
+                var account = GetByAccountNumber(accountNumber);
+                context.Accounts.Remove(account);
+                context.SaveChanges();
         }
 
         public Account GetByAccountNumber(string accountNumber)
@@ -38,6 +38,11 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
         {
             context.Accounts.Update(account);
             context.SaveChanges();
+        }
+
+        public void GetBalance(decimal balance)
+        {
+            context.Accounts.SingleOrDefault(a => a.Balance == balance);
         }
     }
 }

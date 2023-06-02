@@ -16,33 +16,60 @@ namespace OnlineBankingManagementSystem.Controllers
         [HttpPost]
         public IActionResult AddTransaction(TransactionDTO transaction)
         {
-            transactionservice.AddTransaction(transaction);
-            return CreatedAtAction(nameof(GetTransactionById), new { id = transaction.TransactionId }, transaction);
+            try
+            {
+                transactionservice.AddTransaction(transaction);
+                return CreatedAtAction(nameof(GetTransactionById), new { id = transaction.TransactionId }, transaction);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet]
         public IActionResult GetAllTransactions()
         {
-            var transactions = transactionservice.GetAllTransactions();
-            return Ok(transactions);
+            try
+            {
+                var transactions = transactionservice.GetAllTransactions();
+                return Ok(transactions);
+            }
+            catch (Exception e) { 
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet("{accountNumber}")]
         public IActionResult GetTransactionByAccountNumber(string accountNumber) {
-            var transactions = transactionservice.GetTransactionByAccountNumber(accountNumber);
-            if(transactions == null)
+            try
             {
-                return NotFound();
+                var transactions = transactionservice.GetTransactionByAccountNumber(accountNumber);
+                if(transactions == null)
+                {
+                    return NotFound();
+                }
+                return Ok(transactions);
             }
-            return Ok(transactions);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet("{transactionId}")]
         public IActionResult GetTransactionById(int transactionId)
         {
-            var transaction = transactionservice.GetTransactionById(transactionId);
-            if(transaction == null)
+            try
             {
-                return NotFound();
+                var transaction = transactionservice.GetTransactionById(transactionId);
+                if(transaction == null)
+                {
+                    return NotFound();
+                }
+                return Ok(transaction);
             }
-            return Ok(transaction);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

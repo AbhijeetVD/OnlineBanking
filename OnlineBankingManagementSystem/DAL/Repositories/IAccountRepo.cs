@@ -9,5 +9,6 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
         public void Add(Account account);
         public void Update(Account account);
         public void Delete(string accountNumber);
+        public void GetBalance(decimal balance);
     }
 }

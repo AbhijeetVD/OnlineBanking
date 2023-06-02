@@ -41,5 +41,23 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
         {
             return context.Users.Find(username);
         }
+        public void Register(string username, string password, string email, string fullname)
+        {
+            User user = new User();
+            user.Username = username;
+            user.Password = password;
+            user.Email = email;
+            user.FullName = fullname;
+            context.Users.Add(user);
+            context.SaveChanges();
+        }
+        public User Login(string username, string password)
+        {
+            return context.Users.FirstOrDefault(x => x.Username == username && x.Password == password);
+        }
+        public void SaveChanges()
+        {
+            context.SaveChanges();
+        }
     }
 }

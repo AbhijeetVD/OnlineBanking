@@ -34,5 +34,9 @@ namespace OnlineBankingManagementSystem.BLL.Services
         {
             accountrepo.Update((Account)account);
         }
+        public void GetBalance(decimal balance)
+        {
+            accountrepo.GetBalance(balance);
+        }
     }
 }

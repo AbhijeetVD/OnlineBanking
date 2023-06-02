@@ -10,5 +10,8 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
         public User GetByUsername(string username);
         public User GetByEmail(string email);
         public void Add(User user);
+        public void Register(string username, string password, string email, string fullname);
+        public User Login(string username, string password);
+        public void SaveChanges();
     }
 }
