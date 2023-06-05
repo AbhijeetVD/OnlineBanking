@@ -1,74 +1,68 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using OnlineBankingManagementSystem.BLL.DTOs;
 using OnlineBankingManagementSystem.BLL.Services;
 
 namespace OnlineBankingManagementSystem.Controllers
 {
     [ApiController]
-    [Route("api/transactions")]
+    [Route("CtsBank/transactions")]
     public class TransactionController : ControllerBase
     {
-        private readonly ITransactionService transactionservice;
-        public TransactionController(ITransactionService _transactionservice)
+        private readonly ITransactionService _transactionservice;
+        public TransactionController(ITransactionService transactionservice)
         {
-            this.transactionservice = _transactionservice;
+            this._transactionservice = transactionservice;
         }
         [HttpPost]
-        public IActionResult AddTransaction(TransactionDTO transaction)
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<TransactionDTO>> AddTransaction(TransactionDTO transaction)
         {
             try
             {
-                transactionservice.AddTransaction(transaction);
-                return CreatedAtAction(nameof(GetTransactionById), new { id = transaction.TransactionId }, transaction);
+                var add = _transactionservice.AddTransaction(transaction);
+                return Ok(add);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
         [HttpGet]
-        public IActionResult GetAllTransactions()
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<TransactionDTO>> GetAllTransactions()
         {
             try
             {
-                var transactions = transactionservice.GetAllTransactions();
-                return Ok(transactions);
+                return Ok(_transactionservice.GetAllTransactions());
             }
-            catch (Exception e) { 
-                return BadRequest(e.Message);
+            catch (Exception e) {
+                return StatusCode(500, e.Message);
             }
         }
-        [HttpGet("{accountNumber}")]
-        public IActionResult GetTransactionByAccountNumber(string accountNumber) {
+        [HttpGet("getTransactionByAccountNumber/{accountNumber}")]
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<TransactionDTO>> GetTransactionByAccountNumber(int accountNumber) {
             try
             {
-                var transactions = transactionservice.GetTransactionByAccountNumber(accountNumber);
-                if(transactions == null)
-                {
-                    return NotFound();
-                }
-                return Ok(transactions);
+                return Ok(_transactionservice.GetTransactionByAccountNumber(accountNumber));
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
-        [HttpGet("{transactionId}")]
+        [HttpGet("getTransactionById/{transactionId}")]
+        [EnableCors("AllowLocalhost")]
         public IActionResult GetTransactionById(int transactionId)
         {
             try
             {
-                var transaction = transactionservice.GetTransactionById(transactionId);
-                if(transaction == null)
-                {
-                    return NotFound();
-                }
-                return Ok(transaction);
+                return Ok(_transactionservice.GetTransactionById(transactionId));
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
     }

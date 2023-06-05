@@ -1,12 +1,25 @@
-﻿namespace OnlineBankingManagementSystem.DAL.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace OnlineBankingManagementSystem.DAL.Models
 {
     public class Account
     {
-        public string AccountNumber { get; set; }
-        public string FullName { get; set; }
-        public string AccountType { get; set; }
+        [Key]
+        public int AccountNumber { get; set; }
+        [Required]
+        public string FullName { get; set; } = null!;
+        [Required]
+        public string AccountType { get; set; } = null!;
+        [Required]
         public decimal Balance { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        [ForeignKey(nameof(User))]
+        public int UserId { get; set; }
+        
+        
+        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        
+        
         public User User { get; set; }
     }
 }

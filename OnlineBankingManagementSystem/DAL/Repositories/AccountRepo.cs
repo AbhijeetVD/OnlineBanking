@@ -5,44 +5,44 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
 {
     public class AccountRepo : IAccountRepo
     {
-        private readonly AppDbContext context;
-        public AccountRepo(AppDbContext _context)
+        private readonly AppDbContext _context;
+        public AccountRepo(AppDbContext context)
         {
-            context = _context;
+            _context = context;
         }
         public void Add(Account account)
         {
-                context.Accounts.Add(account);
-                context.SaveChanges();
+                _context.Accounts.Add(account);
+                _context.SaveChanges();
         }
 
-        public void Delete(string accountNumber)
+        public void Delete(int accountNumber)
         {
                 var account = GetByAccountNumber(accountNumber);
-                context.Accounts.Remove(account);
-                context.SaveChanges();
+                _context.Accounts.Remove(account);
+                _context.SaveChanges();
         }
 
-        public Account GetByAccountNumber(string accountNumber)
+        public Account GetByAccountNumber(int accountNumber)
         {
-            return context.Accounts.SingleOrDefault(a => a.AccountNumber == accountNumber);
+            var account = _context.Accounts.FirstOrDefault(a => a.AccountNumber == accountNumber);
+            if(account == null)
+            {
+                throw new Exception("No account found!");
+            }
+            return account;
         }
 
 
         public IEnumerable<Account> GetAll()
         {
-            return context.Accounts.ToList();
+            return _context.Accounts.ToList();
         }
 
         public void Update(Account account)
         {
-            context.Accounts.Update(account);
-            context.SaveChanges();
-        }
-
-        public void GetBalance(decimal balance)
-        {
-            context.Accounts.SingleOrDefault(a => a.Balance == balance);
+            _context.Entry(account).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
         }
     }
 }

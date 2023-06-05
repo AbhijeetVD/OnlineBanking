@@ -6,28 +6,101 @@ namespace OnlineBankingManagementSystem.BLL.Services
 {
     public class TransactionService : ITransactionService
     {
-        public readonly TransactionRepo transactionrepo;
-        public TransactionService(TransactionRepo _transactionrepo)
+        public readonly ITransactionRepo _transactionrepo;
+        public TransactionService(ITransactionRepo transactionrepo)
         {
-            this.transactionrepo = _transactionrepo;
+            this._transactionrepo = transactionrepo;
         }
-        public void AddTransaction(TransactionDTO transaction)
+        public TransactionDTO AddTransaction(TransactionDTO transaction)
         {
-            transactionrepo.Add((Transaction)transaction);
+            try
+            {
+                var add = new Transaction
+                {
+                    TransactionDate = DateTime.Now,
+                    TransactionId = transaction.TransactionId,
+                    AccountNumber = transaction.AccountNumber,
+                    Amount = transaction.Amount,
+                    ReceiverAccountNumber = transaction.ReceiverAccountNumber,
+                };
+                _transactionrepo.Add(add);
+                return new TransactionDTO {
+                    TransactionDate = DateTime.Now,
+                    TransactionId = transaction.TransactionId,
+                    Amount = transaction.Amount,
+                    ReceiverAccountNumber = transaction.ReceiverAccountNumber,
+                    AccountNumber = transaction.AccountNumber,
+                };          
+            }
+            catch (Exception e) { 
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
 
         public IEnumerable<TransactionDTO> GetAllTransactions()
         {
-            return (IEnumerable<TransactionDTO>)transactionrepo.GetAll();
+            try
+            {
+                var transactions = _transactionrepo.GetAll();
+                return transactions.Select(t => new TransactionDTO
+                {
+                    TransactionDate = DateTime.Now,
+                    TransactionId = t.TransactionId,
+                    Amount = t.Amount,
+                    ReceiverAccountNumber = t.ReceiverAccountNumber,
+                    AccountNumber= t.AccountNumber,
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
-
-        public IEnumerable<TransactionDTO> GetTransactionByAccountNumber(string accountNumber)
+        public IEnumerable<TransactionDTO> GetTransactionByAccountNumber(int accountNumber)
         {
-            return (IEnumerable<TransactionDTO>)transactionrepo.GetByAccountNumber(accountNumber);
+            try
+            {
+                var transactions = _transactionrepo.GetByAccountNumber(accountNumber);
+                return transactions.Select(t => new TransactionDTO
+                {
+                    TransactionDate = DateTime.Now,
+                    TransactionId = t.TransactionId,
+                    Amount = t.Amount,
+                    ReceiverAccountNumber = t.ReceiverAccountNumber,
+                    AccountNumber = t.AccountNumber,
+                });
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
         public TransactionDTO GetTransactionById(int transactionId)
         {
-            return transactionrepo.GetById(transactionId);
+            try
+            {
+                var transaction = _transactionrepo.GetById(transactionId);
+                if(transaction == null)
+                {
+                    throw new Exception("Transaction now found!");
+                }
+                return new TransactionDTO
+                {
+                    TransactionDate = DateTime.Now,
+                    TransactionId = transactionId,
+                    Amount = transaction.Amount,
+                    ReceiverAccountNumber = transaction.ReceiverAccountNumber,
+                    AccountNumber = transaction.AccountNumber,
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
         }
     }
 }

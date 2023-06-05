@@ -12,8 +12,8 @@ using OnlineBankingManagementSystem.DAL;
 namespace OnlineBankingManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230602114127_InitialModel")]
-    partial class InitialModel
+    [Migration("20230604230000_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,8 +26,11 @@ namespace OnlineBankingManagementSystem.Migrations
 
             modelBuilder.Entity("OnlineBankingManagementSystem.DAL.Models.Account", b =>
                 {
-                    b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AccountNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountNumber"), 1L, 1);
 
                     b.Property<string>("AccountType")
                         .IsRequired()
@@ -45,6 +48,8 @@ namespace OnlineBankingManagementSystem.Migrations
 
                     b.HasKey("AccountNumber");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Accounts");
                 });
 
@@ -56,12 +61,14 @@ namespace OnlineBankingManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"), 1L, 1);
 
-                    b.Property<string>("AccountNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AccountNumber")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ReceiverAccountNumber")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
@@ -81,9 +88,12 @@ namespace OnlineBankingManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
-                    b.Property<string>("AccountNumber")
+                    b.Property<int>("AccountNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConfirmPassword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -103,10 +113,18 @@ namespace OnlineBankingManagementSystem.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("AccountNumber")
-                        .IsUnique();
-
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("OnlineBankingManagementSystem.DAL.Models.Account", b =>
+                {
+                    b.HasOne("OnlineBankingManagementSystem.DAL.Models.User", "User")
+                        .WithMany("Accounts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineBankingManagementSystem.DAL.Models.Transaction", b =>
@@ -120,23 +138,14 @@ namespace OnlineBankingManagementSystem.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("OnlineBankingManagementSystem.DAL.Models.User", b =>
-                {
-                    b.HasOne("OnlineBankingManagementSystem.DAL.Models.Account", "Account")
-                        .WithOne("User")
-                        .HasForeignKey("OnlineBankingManagementSystem.DAL.Models.User", "AccountNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
             modelBuilder.Entity("OnlineBankingManagementSystem.DAL.Models.Account", b =>
                 {
                     b.Navigation("Transactions");
+                });
 
-                    b.Navigation("User")
-                        .IsRequired();
+            modelBuilder.Entity("OnlineBankingManagementSystem.DAL.Models.User", b =>
+                {
+                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

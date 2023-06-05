@@ -1,97 +1,83 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using OnlineBankingManagementSystem.BLL.DTOs;
 using OnlineBankingManagementSystem.BLL.Services;
 
 namespace OnlineBankingManagementSystem.Controllers
 {
     [ApiController]
-    [Route("api/accounts")]
+    [Route("CtsBank/accounts")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountService accountservice;
-        public AccountController(IAccountService _accountservice)
+        private readonly IAccountService _accountservice;
+        public AccountController(IAccountService accountservice)
         {
-            this.accountservice = _accountservice;
+            this._accountservice = accountservice;
         }
         [HttpGet]
-        public IActionResult GetAllAccounts() {
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<AccountDTO>> GetAllAccounts() {
             try
             {
-                var accounts = accountservice.GetAllAccounts();
-                return Ok(accounts);
+                return Ok(_accountservice.GetAllAccounts());
             }
             catch(Exception e) { 
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
-        [HttpGet("{accountNumber}")]
-        public IActionResult GetAccountByAccountNumber(string accountNumber) {
+        [HttpGet("getAccountByAccountNumber/{accountNumber}")]
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<AccountDTO>> GetAccountByAccountNumber(int accountNumber) {
             try
             {
-                var account = accountservice.GetAccountByAccountNumber(accountNumber);
-                if(account == null)
-                {
-                    return NotFound();
-                }
-                return Ok(account);
+                return Ok(_accountservice.GetAccountByAccountNumber(accountNumber));
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
         [HttpPost]
-        public IActionResult AddAccount(AccountDTO account)
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<AccountDTO>> AddAccount(CreateAccountDTO account)
         {
             try
             {
-                accountservice.AddAccount(account);
-                return CreatedAtAction(nameof(GetAccountByAccountNumber), new { accountNumber = account.AccountNumber }, account);
+                var add = _accountservice.AddAccount(account);
+                return Ok(add);
             }
             catch(Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.InnerException);
             }
         }
-        [HttpPut]
-        public IActionResult UpdateAccount(AccountDTO account)
+        [HttpPut("updateAccount/{accountNumber}")]
+        [EnableCors("AllowLocalHost")]
+        public ActionResult<IEnumerable<AccountDTO>> UpdateAccount(int accountNumber, UpdateAccountDTO account)
         {
             try
             {
-                accountservice.UpdateAccount(account);
-                return Ok(account);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        [HttpDelete("{accountNumber}")]
-        public IActionResult DeleteAccount(string accountNumber)
-        {
-            try
-            {
-                accountservice.DeleteAccount(accountNumber);
+                _accountservice.UpdateAccount(accountNumber, account);
                 return NoContent();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
-        [HttpGet("{balance}")]
-        public IActionResult GetAccountBalance(decimal balance)
+        [HttpDelete("deleteAccount/{accountNumber}")]
+        [EnableCors("AllowLocalhost")]
+        public ActionResult<IEnumerable<AccountDTO>> DeleteAccount(int accountNumber)
         {
             try
             {
-                accountservice.GetBalance(balance);
-                return Ok(balance);
+                _accountservice.DeleteAccount(accountNumber);
+                return NoContent();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.Message);
             }
         }
-
     }
 }

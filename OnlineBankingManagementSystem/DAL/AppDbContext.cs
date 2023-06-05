@@ -13,28 +13,14 @@ namespace OnlineBankingManagementSystem.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>()
-                .HasKey(a => a.AccountNumber);
-            modelBuilder.Entity<Transaction>()
-                .HasKey(a => a.TransactionId);
-            modelBuilder.Entity<User>()
-                .HasKey(a => a.UserId);
-            modelBuilder.Entity<Account>()
-                .HasMany(a => a.Transactions)
-                .WithOne(t => t.Account)
-                .HasForeignKey(t => t.AccountNumber);
-            modelBuilder.Entity<Account>()
                 .HasOne(a => a.User)
-                .WithOne(u => u.Account)
-                .HasForeignKey<User>(u => u.AccountNumber);
+                .WithMany(u => u.Accounts);
+            modelBuilder.Entity<Transaction>()
+                .HasOne(a => a.Account)
+                .WithMany(u => u.Transactions);
             modelBuilder.Entity<User>()
-                .Property(u => u.Username)
-                .IsRequired();
-            modelBuilder.Entity<User>()
-            .Property(u => u.FullName)
-                .IsRequired();
-            modelBuilder.Entity<Account>()
-                .Property(a => a.AccountType)
-                .IsRequired();
+                .HasMany(u => u.Accounts)
+                .WithOne(a => a.User);        
         }
     }
 }

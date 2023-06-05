@@ -4,60 +4,72 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
 {
     public class UserRepo : IUserRepo
     {
-        private readonly AppDbContext context;
-        public UserRepo(AppDbContext _context)
+        private readonly AppDbContext _context;
+        public UserRepo(AppDbContext context)
         {
-            context = _context;
+            _context = context;
         }
 
         public void Add(User user)
         {
-            context.Users.Add(user);
-            context.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
 
+        public void Delete(User user)
+        {
+            _context.Users.Remove(user);
+            _context.SaveChanges();
         }
 
         public IEnumerable<User> GetAll()
         {
-            return context.Users.ToList();
+            return _context.Users.ToList();
         }
 
-        public User GetByAccountNumber(string accountNumber)
+        public User GetByAccountNumber(int accountNumber)
         {
-            return context.Users.Find(accountNumber);
+            var user = _context.Users.Find(accountNumber);
+            if (user == null)
+            {
+                throw new Exception("No user available for this account number!");
+            }
+            return user;
         }
 
         public User GetByEmail(string email)
         {
-            return context.Users.Find(email);
+            var user = _context.Users.Find(email);
+            if (user == null)
+            {
+                throw new Exception("No user available for this Email!");
+            }
+            return user;
         }
-
         public User GetByUserId(int userId)
         {
-            return context.Users.Find(userId);
+            var user = _context.Users.Find(userId);
+            if (user == null)
+            {
+                throw new Exception("No user available for this ID!");
+            }
+            return user;
         }
 
         public User GetByUsername(string username)
         {
-            return context.Users.Find(username);
+            var user = _context.Users.Find(username);
+            if (user == null)
+            {
+                throw new Exception("No user available for this Username!");
+            }
+            return user;
         }
-        public void Register(string username, string password, string email, string fullname)
+
+        public void Update(User user)
         {
-            User user = new User();
-            user.Username = username;
-            user.Password = password;
-            user.Email = email;
-            user.FullName = fullname;
-            context.Users.Add(user);
-            context.SaveChanges();
-        }
-        public User Login(string username, string password)
-        {
-            return context.Users.FirstOrDefault(x => x.Username == username && x.Password == password);
-        }
-        public void SaveChanges()
-        {
-            context.SaveChanges();
+            _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
         }
     }
 }

@@ -5,10 +5,9 @@ namespace OnlineBankingManagementSystem.BLL.Services
     public interface IAccountService
     {
         public IEnumerable<AccountDTO> GetAllAccounts();
-        public AccountDTO GetAccountByAccountNumber(string accountNumber);
-        public void AddAccount(AccountDTO accountDTO);
-        public void DeleteAccount(string accountNumber);
-        public void UpdateAccount(AccountDTO account);
-        public void GetBalance(decimal balance);
+        public AccountDTO GetAccountByAccountNumber(int accountNumber);
+        public AccountDTO AddAccount(CreateAccountDTO createaccountdto);
+        public bool DeleteAccount(int accountNumber);
+        public AccountDTO UpdateAccount(int accountNumber, UpdateAccountDTO account);
     }
 }

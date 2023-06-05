@@ -5,29 +5,38 @@ namespace OnlineBankingManagementSystem.DAL.Repositories
     public class TransactionRepo : ITransactionRepo
     {
 
-        private readonly AppDbContext context;
-        public TransactionRepo(AppDbContext _context)
+        private readonly AppDbContext _context;
+        public TransactionRepo(AppDbContext context)
         {
-            context = _context;
+            _context = context;
         }
         public void Add(Transaction transaction)
         {
-            context.Transactions.Add(transaction);
-            context.SaveChanges();
+            _context.Transactions.Add(transaction);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Transaction> GetAll()
         {
-            return context.Transactions.ToList();
+            return _context.Transactions.ToList();
         }
-        public IEnumerable<Transaction> GetByAccountNumber(string accountNumber)
+        public IEnumerable<Transaction> GetByAccountNumber(int accountNumber)
         {
-            return (IEnumerable<Transaction>)context.Transactions.Select(a => a.AccountNumber == accountNumber).ToList();
-
+            var transactions = (IEnumerable<Transaction>)_context.Transactions.Select(a => a.AccountNumber == accountNumber).ToList();
+            if(transactions == null)
+            {
+                throw new Exception("No transactions available!");
+            }
+            return transactions;
         }
         public Transaction GetById(int transactionId)
         {
-            return context.Transactions.Find(transactionId);
+            var transaction = _context.Transactions.Find(transactionId);
+            if(transaction == null)
+            {
+                throw new Exception("No transaction available for this ID!");
+            }
+            return transaction;
         }
     }
 }
